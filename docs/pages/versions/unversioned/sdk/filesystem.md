@@ -13,7 +13,7 @@ import PlatformsSection from '~/components/plugins/PlatformsSection';
 
 import SnackInline from '~/components/plugins/SnackInline';
 
-**`expo-file-system`** provides access to a file system stored locally on the device. Within Expo Go, each project has a separate file system and has no access to the file system of other Expo projects. However, it can save content shared by other projects to the local filesystem, as well as share local files with other projects. It is also capable of uploading and downloading files from network URLs.
+**`expo-file-system`** provides access to a file system stored locally on the device. Within Expo Go, each project has a separate file system and has no access to the file system of other Expo projects. However, it can save content shared by other projects to the local file system, as well as share local files with other projects. It is also capable of uploading and downloading files from network URLs.
 
 <!-- TODO: update this image so we don't have to force a white background on it -->
 
@@ -80,7 +80,7 @@ try {
   console.error(e);
 }
 
-//To resume a download across app restarts, assuming the the DownloadResumable.savable() object was stored:
+// To resume a download across app restarts, assuming the the DownloadResumable.savable() object was stored:
 const downloadSnapshotJson = await AsyncStorage.getItem('pausedDownload');
 const downloadSnapshot = JSON.parse(downloadSnapshotJson);
 const downloadResumable = new FileSystem.DownloadResumable(
@@ -138,7 +138,7 @@ export async function addMultipleGifs(gifIds: string[]) {
   }
 }
 
-// Returns URI to our local gif file
+// Return URI to our local gif file
 // If our gif doesn't exist locally, it downloads it
 export async function getSingleGif(gifId: string) {
   await ensureDirExists();
@@ -214,13 +214,13 @@ These values can be used to define how sessions work on iOS.
 
   > **Note**: The background session doesn't fail if the server or your connection is down. Rather, it continues retrying until the task succeeds or is canceled manually.
 
-- **FileSystem.FileSystemSessionType.FOREGROUND** -- Using this mode means that downloading/uploading session on the native side will be terminated once the application becomes inactive (e.g. when it goes to background). Bringing the application to foreground again would trigger Promise rejection.
+- **FileSystem.FileSystemSessionType.FOREGROUND** -- Using this mode means that downloading/uploading session on the native side will be terminated once the application becomes inactive (e.g. when it goes to background). Bringing the application to foreground again would trigger a Promise rejection.
 
 ### `FileSystem.FileSystemUploadType`
 
 - **FileSystem.FileSystemUploadType.BINARY_CONTENT** -- The file will be sent as a request's body. The request can't contain additional data.
 
-- **FileSystem.FileSystemUploadType.MULTIPART** -- An [RFC 2387-compliant](https://www.ietf.org/rfc/rfc2387.txt) request body. The provided file will be encoded into HTTP request. This request can contain additional data.
+- **FileSystem.FileSystemUploadType.MULTIPART** -- An [RFC 2387-compliant](https://www.ietf.org/rfc/rfc2387.txt) request body. The provided file will be encoded into an HTTP request. This request can contain additional data.
 
 #### How to handle such requests?
 
@@ -285,7 +285,7 @@ If no item exists at this URI, returns a Promise that resolves to `{ exists: fal
 
 ### `FileSystem.readAsStringAsync(fileUri, options)`
 
-Read the entire contents of a file as a string. Binary will be returned in raw format, you will need to append `data:image/png;base64,` to use it as Base64.
+Read the entire contents of a file as a string. Binary will be returned in raw format. You will need to append `data:image/png;base64,` to use it as Base64.
 
 #### Arguments
 
@@ -309,7 +309,7 @@ Write the entire contents of a file as a string.
 
 #### Arguments
 
-- **fileUri (_string_)** -- `file://` or [SAF](#saf-uri) URI to the file or directory. Note: when you're using SAF URI the file needs to exist. You can't create a new file.
+- **fileUri (_string_)** -- `file://` or [SAF](#saf-uri) URI to the file or directory. Note: when using a SAF URI the file needs to exist. You can't create a new file.
 
 - **contents (_string_)** -- The string to replace the contents of the file with.
 
@@ -343,7 +343,7 @@ Move a file or directory to a new location.
 
 ### `FileSystem.copyAsync(options)`
 
-Create a copy of a file or directory. Directories are recursively copied with all of their contents. It can be also used to copy content shared by other apps to local filesystem.
+Create a copy of a file or directory. Directories are recursively copied with all of their contents. It can be also used to copy content shared by other apps to the local file system.
 
 #### Arguments
 
@@ -618,7 +618,7 @@ The `StorageAccessFramework` is a namespace inside of the `expo-file-system` mod
 
 ## SAF URI
 
-A SAF URI is a URI that is compatible with the Storage Access Framework. It should look like this `content://com.android.externalstorage.*`. The easiest way to obtain such URI is by `requestDirectoryPermissionsAsync` method.
+A SAF URI is a URI that is compatible with the Storage Access Framework. It should look like this `content://com.android.externalstorage.*`. The easiest way to obtain such a URI is via the `requestDirectoryPermissionsAsync` method.
 
 ## API
 
@@ -662,7 +662,7 @@ async function migrateAlbum(albumName: string) {
   }
 
   const permittedUri = permissions.directoryUri;
-  // Checks if users selected the correct folder
+  // Checks if a user has selected the correct folder
   if (!permittedUri.includes(albumName)) {
     return;
   }
@@ -703,7 +703,7 @@ async function migrateAlbum(albumName: string) {
 
 ### `StorageAccessFramework.getUriForDirectoryInRoot(folderName)`
 
-Gets a [SAF URI](#saf-uri) pointing to a folder in the Android root directory. You can use this function to get URI for `StorageAccessFramework.requestDirectoryPermissionsAsync` when you trying to migrate an album. In that case, the name of the album is the folder name.
+Gets a [SAF URI](#saf-uri) pointing to a folder in the Android root directory. You can use this function to get a URI for `StorageAccessFramework.requestDirectoryPermissionsAsync` when you're trying to migrate an album. In that case, the name of the album is the folder name.
 
 #### Arguments
 
@@ -719,7 +719,7 @@ Returns a [SAF URI](#saf-uri) to a folder.
 
 #### Arguments
 
-- **initialFileUrl (_string_)** -- **Optional**. The [SAF URI](#saf-uri) of the directory that the file picker should display when it first loads. If URI is incorrect or points to a non-existing folder, it's ignored. **Available only on Android R or higher**.
+- **initialFileUrl (_string_)** -- **Optional**. The [SAF URI](#saf-uri) of the directory that the file picker should display when it first loads. If the URI is incorrect or points to a non-existing folder, it's ignored. **Available only on Android R or higher**.
 
 #### Returns
 
@@ -727,7 +727,7 @@ Returns a Promise that resolves to an object with the following fields:
 
 - **granted (_boolean_)** -- Whether the permissions were granted.
 
-- **directoryUri (_string_)** -- The [SAF URI](#saf-uri) to the user's selected directory. Available only if permissions were granted.
+- **directoryUri (_string_)** -- The [SAF URI](#saf-uri) to the users selected directory. Available only if permissions were granted.
 
 ### `StorageAccessFramework.readDirectoryAsync(dirUri)`
 
@@ -749,7 +749,7 @@ Creates a new empty directory.
 
 - **parentUri (_string_)** -- The [SAF](#saf-uri) URI to the parent directory.
 
-- **dirName (_string_)** -- The name of new directory.
+- **dirName (_string_)** -- The name of the new directory.
 
 #### Returns
 
@@ -763,9 +763,9 @@ Creates a new empty file.
 
 - **parentUri (_string_)** -- The [SAF](#saf-uri) URI to the parent directory.
 
-- **fileName (_string_)** -- The name of new file **without the extension**.
+- **fileName (_string_)** -- The name of the new file **without the extension**.
 
-- **mimeType (_string_)** -- The MIME of new file.
+- **mimeType (_string_)** -- The MIME of the new file.
 
 #### Returns
 
@@ -795,7 +795,7 @@ Alias to [FileSystem.copyAsync(options)](#filesystemcopyasyncoptions)
 
 ## Supported URI schemes
 
-In this table, you can see what type of URI can be handled by each method. For example, if you have an URI, which begins with `content://`, you cannot use `FileSystem.readAsStringAsync()`, but you can use `FileSystem.copyAsync()` which supports this scheme.
+In this table, you can see what type of URI can be handled by each method. For example, if you have a URI, which begins with `content://`, you cannot use `FileSystem.readAsStringAsync()`, but you can use `FileSystem.copyAsync()` which supports this scheme.
 
 | Method name               | Android                                                                                                                                   | iOS                                                                                             |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | --- |
